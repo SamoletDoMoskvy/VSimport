@@ -14,5 +14,4 @@ six==1.16.0
 spotipy==2.19.0
 urllib3==1.26.7
 vk-api==11.9.7
-vk-audio==6.9
 yarl==1.7.2
