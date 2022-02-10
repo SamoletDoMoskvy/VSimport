@@ -13,13 +13,12 @@ from langdetect import detect
 
 class Spotify:
     playlist_exists = False
-    playlist_id:str
+    playlist_id: str
     scopes = 'user-library-read, user-library-modify, playlist-modify-private'
     client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scopes,
-                                              client_id=settings.SPOTIPY_CLIENT_ID,
-                                              client_secret=settings.SPOTIPY_CLIENT_SECRET,
-                                              redirect_uri=settings.SPOTIPY_CLIENT_REDIRECT_URI))
-
+                                                       client_id=settings.SPOTIPY_CLIENT_ID,
+                                                       client_secret=settings.SPOTIPY_CLIENT_SECRET,
+                                                       redirect_uri=settings.SPOTIPY_CLIENT_REDIRECT_URI))
 
     @classmethod
     def search(cls, *args):
@@ -46,8 +45,8 @@ class Spotify:
                 print("\n\n")
                 return
 
-            #print('Playlist id - ', Spotify.playlist_id)
-            #print('Track id - ', cls.item)
+            # print('Playlist id - ', Spotify.playlist_id)
+            # print('Track id - ', cls.item)
             print(f'{cls.track_group[-1].artist} - {cls.track_group[-1].track}')
             return Spotify.client.user_playlist_add_tracks(user=Spotify.client.current_user()['id'],
                                                            playlist_id=Spotify.playlist_id,
@@ -63,7 +62,6 @@ class TrackData:
 
 
 class TrackExplorer:
-
     group = []
     len_of_vk = 0
     len_of_added = 0
@@ -76,15 +74,15 @@ class TrackExplorer:
 
         cls.checking_track.artist = translit(cls.checking_track.artist, language_code='ru', reversed=True)
 
-        if cls.founded_track['album']['artists'][0]['name'][0:3].lower() in cls.checking_track.artist[0:3].lower():
-            if cls.founded_track['name'][0:3].lower() in cls.checking_track.track[0:3].lower():
-                TrackCollector.group.append(TrackCollector.add_track(cls.founded_track))
-
-        elif cls.founded_track['name'][0:3].lower() in cls.checking_track.track[0:3].lower():
-            TrackCollector.group.append(TrackCollector.add_track(cls.founded_track))
+        # if cls.founded_track['album']['artists'][0]['name'][0:3].lower() in cls.checking_track.artist[0:3].lower():
+        #     if cls.founded_track['name'][0:3].lower() in cls.checking_track.track[0:3].lower():
+        #         TrackCollector.group.append(TrackCollector.add_track(cls.founded_track))
+        #
+        # elif cls.founded_track['name'][0:3].lower() in cls.checking_track.track[0:3].lower():
+        TrackCollector.group.append(TrackCollector.add_track(cls.founded_track))
 
         if cls.founded_track == cls.response['tracks']['items'][-1]:
-            Spotify.add_track(TrackExplorer.sort_by_popularity(TrackCollector.group)) # add completer
+            Spotify.add_track(TrackExplorer.sort_by_popularity(TrackCollector.group))  # add completer
             TrackExplorer.len_of_added += 1
             TrackCollector.group = []
 
@@ -92,16 +90,17 @@ class TrackExplorer:
     def sort_by_popularity(cls, *args):
         cls.track_group = args[0]
 
-        for i in range(len(cls.track_group)-1):
-            for j in range(len(cls.track_group)-i-1):
-                if int(cls.track_group[j].popularity) > int(cls.track_group[j+1].popularity):
-                    cls.track_group[j], cls.track_group[j+1] = cls.track_group[j+1], cls.track_group[j]
+        for i in range(len(cls.track_group) - 1):
+            for j in range(len(cls.track_group) - i - 1):
+                if int(cls.track_group[j].popularity) > int(cls.track_group[j + 1].popularity):
+                    cls.track_group[j], cls.track_group[j + 1] = cls.track_group[j + 1], cls.track_group[j]
 
         return cls.track_group
 
 
 class TrackCollector:
     group = []
+
     @classmethod
     def add_track(cls, *args):
         cls.track = args[0]
@@ -140,5 +139,6 @@ class Searcher:
                 TrackExplorer.explore(record, track, cls.response)
 
         print(f'Ready!\t {TrackExplorer.len_of_added}/{TrackExplorer.len_of_vk} was imported.')
+
 
 Searcher.search()
