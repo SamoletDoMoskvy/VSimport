@@ -4,22 +4,21 @@ import getpass
 
 
 class VkAuthentication:
-    def __init__(self):
-        self.login: str
-        self.password: str
-        self.vk_session: object
+    login: str
+    password: str
+    vk_session: object
 
-    def login(self):
-        self.login = str(input('Enter VK login: '))
-        self.password = str(getpass.getpass('Enter VK password: '))
-        self.vk_session = vk_api.VkApi(login=self.login, password=self.password)
-        self.vk_session.auth()
-        return vk_audio.VkAudio(vk=self.vk_session)
+    @classmethod
+    def login(cls):
+        cls.login = str(input('Enter VK login: '))
+        cls.password = str(getpass.getpass('Enter VK password: '))
+        cls.vk_session = vk_api.VkApi(login=cls.login, password=cls.password)
+        cls.vk_session.auth()
+        return vk_audio.VkAudio(vk=cls.vk_session)
 
 
 class VkAudioCollector:
-    vk_session = VkAuthentication()
-    vk_session = vk_session.login()
+    vk_session = VkAuthentication.login()
 
     @classmethod
     def get_audio_records(cls):

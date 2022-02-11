@@ -1,5 +1,5 @@
-from spotify_src import Searcher
+from spotify_src import Importer
 
 
 if __name__ == '__main__':
-    Searcher.search()
+    Importer.start()
