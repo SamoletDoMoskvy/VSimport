@@ -21,5 +21,5 @@ class VkAudioCollector:
     vk_session = VkAuthentication.login()
 
     @classmethod
-    def get_audio_records(cls):
+    def get_audio_records(cls) -> object:
         return cls.vk_session.load(owner_id=None)
